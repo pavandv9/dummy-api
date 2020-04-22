@@ -5,6 +5,7 @@ import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import in.test.dummy.api.repository.DummyApiRepository;
@@ -23,6 +24,9 @@ public class DummyApiService {
 	@Autowired
 	DummyApiRepository repository;
 
+	@Scheduled(cron = "0 0 23 * * *")
+	public void procesCron() {}
+	
 	public DummyAPiModel post(DummyAPiModel dummyAPiModel) {
 		return repository.save(dummyAPiModel);
 	}
