@@ -28,13 +28,18 @@ public class DummyApiController {
 	}
 	
 	@PutMapping
-	public ResponseEntity<?>  put(@RequestBody DummyAPiModel dummyAPiModel) {
+	public ResponseEntity<?> put(@RequestBody DummyAPiModel dummyAPiModel) {
 		return service.put(dummyAPiModel);
 	}
 	
 	@GetMapping()
 	public List<DummyAPiModel> get() {
 		return service.get();
+	}
+	
+	@PostMapping("/bulk")
+	public ResponseEntity<?> post(@RequestBody List<DummyAPiModel> dummyAPiModel) {
+		return service.post(dummyAPiModel);
 	}
 	
 	@GetMapping("/id/{id}")
