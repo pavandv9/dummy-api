@@ -1,18 +1,24 @@
 package in.test.dummy.api.services;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import org.json.simple.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+
+import com.google.gson.Gson;
 
 import in.test.dummy.api.repository.DummyApiRepository;
 import in.test.dummy.api.requestModel.DummyAPiModel;
 import in.test.dummy.api.responseModel.Error;
 import in.test.dummy.api.responseModel.Message;
 import in.test.dummy.api.responseModel.Success;
+import in.test.dummy.api.utils.JsonUtil;
+
 
 @Service
 public class DummyApiService {
@@ -23,10 +29,31 @@ public class DummyApiService {
 
 	@Autowired
 	DummyApiRepository repository;
-
-	@Scheduled(cron = "0 0 23 * * *")
-	public void procesCron() {}
 	
+
+	@Scheduled(cron = "0 0 0 * * *")
+	public void procesCron() {
+		JSONArray jsonArray = new JsonUtil().getUsers();
+		Gson gson = new Gson();
+		List<DummyAPiModel> list = new ArrayList<>();
+		for (Object json : jsonArray) {
+			DummyAPiModel request = gson.fromJson(json.toString(), DummyAPiModel.class);
+			list.add(request);
+		}
+		deleteAllData();
+		post(list);
+	}
+
+	public ResponseEntity<?> post(List<DummyAPiModel> listDummyAPiModel) {
+		List<DummyAPiModel> list = new ArrayList<>();
+		for (DummyAPiModel request : listDummyAPiModel) {
+			DummyAPiModel res = repository.save(request);
+			list.add(res);
+		}
+		return (list != null || !list.isEmpty()) ? ResponseEntity.ok().body(list)
+				: ResponseEntity.badRequest().body(list);
+	}
+
 	public DummyAPiModel post(DummyAPiModel dummyAPiModel) {
 		return repository.save(dummyAPiModel);
 	}
@@ -34,9 +61,9 @@ public class DummyApiService {
 	public ResponseEntity<?> put(DummyAPiModel dummyAPiModel) {
 		DummyAPiModel updatedRequest;
 		try {
-			updatedRequest = repository.findById(dummyAPiModel.getId()).get();
+			updatedRequest = repository.findById(dummyAPiModel.getUserid()).get();
 		} catch (NoSuchElementException e) {
-			error.setError("No data found for id " + dummyAPiModel.getId());
+			error.setError("No data found for id " + dummyAPiModel.getUserid());
 			return ResponseEntity.badRequest().body(error);
 		}
 		updatedRequest.setName(dummyAPiModel.getName());
@@ -65,5 +92,9 @@ public class DummyApiService {
 
 	public void delete(Long id) {
 		repository.deleteById(id);
+	}
+	
+	private void deleteAllData() {
+		repository.deleteAll();
 	}
 }
