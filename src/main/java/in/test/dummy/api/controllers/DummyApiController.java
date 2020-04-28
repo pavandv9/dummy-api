@@ -21,37 +21,37 @@ public class DummyApiController {
 
 	@Autowired
 	DummyApiService service;
-	
+
 	@PostMapping
-	public DummyAPiModel post(@RequestBody DummyAPiModel dummyAPiModel) {
+	public ResponseEntity<?> post(@RequestBody DummyAPiModel dummyAPiModel) {
 		return service.post(dummyAPiModel);
 	}
-	
+
 	@PutMapping
 	public ResponseEntity<?> put(@RequestBody DummyAPiModel dummyAPiModel) {
 		return service.put(dummyAPiModel);
 	}
-	
+
 	@GetMapping()
 	public List<DummyAPiModel> get() {
 		return service.get();
 	}
-	
+
 	@PostMapping("/bulk")
 	public ResponseEntity<?> post(@RequestBody List<DummyAPiModel> dummyAPiModel) {
 		return service.post(dummyAPiModel);
 	}
-	
+
 	@GetMapping("/id/{id}")
 	public ResponseEntity<?> get(@PathVariable Long id) {
 		return service.get(id);
 	}
-	
+
 	@GetMapping("/query")
 	public ResponseEntity<?> getQuery(@RequestParam Long id) {
 		return service.get(id);
 	}
-	
+
 	@DeleteMapping("/id/{id}")
 	public void delete(@PathVariable Long id) {
 		service.delete(id);
