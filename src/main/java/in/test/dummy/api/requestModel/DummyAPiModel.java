@@ -3,6 +3,7 @@ package in.test.dummy.api.requestModel;
 import java.time.LocalDateTime;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 import org.hibernate.annotations.CreationTimestamp;
@@ -12,6 +13,8 @@ import org.hibernate.annotations.UpdateTimestamp;
 public class DummyAPiModel {
 
 	@Id
+	@GeneratedValue
+	private long id;
 	private long userid;
 	private String name;
 	private String topic;
@@ -21,6 +24,14 @@ public class DummyAPiModel {
 	@UpdateTimestamp
 	private LocalDateTime updated_at;
 
+	
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
 
 	public long getUserid() {
 		return userid;
