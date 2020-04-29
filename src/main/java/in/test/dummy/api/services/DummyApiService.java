@@ -19,7 +19,6 @@ import in.test.dummy.api.responseModel.Message;
 import in.test.dummy.api.responseModel.Success;
 import in.test.dummy.api.utils.JsonUtil;
 
-
 @Service
 public class DummyApiService {
 
@@ -30,8 +29,7 @@ public class DummyApiService {
 	@Autowired
 	DummyApiRepository repository;
 	
-
-	@Scheduled(cron = "0 0 0 * * *")
+	@Scheduled(cron = "0 0 0 * * THU")
 	public void procesCron() {
 		JSONArray jsonArray = new JsonUtil().getUsers();
 		Gson gson = new Gson();
@@ -54,8 +52,9 @@ public class DummyApiService {
 				: ResponseEntity.badRequest().body(list);
 	}
 
-	public DummyAPiModel post(DummyAPiModel dummyAPiModel) {
-		return repository.save(dummyAPiModel);
+	public ResponseEntity<?> post(DummyAPiModel dummyAPiModel) {
+		DummyAPiModel res = repository.save(dummyAPiModel);
+		return ResponseEntity.ok().body(res);
 	}
 
 	public ResponseEntity<?> put(DummyAPiModel dummyAPiModel) {
