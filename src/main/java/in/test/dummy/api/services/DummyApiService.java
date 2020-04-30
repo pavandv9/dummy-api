@@ -29,7 +29,7 @@ public class DummyApiService {
 	@Autowired
 	DummyApiRepository repository;
 	
-	@Scheduled(cron = "0 0 0 * * THU")
+	@Scheduled(cron = "0 0 0 ?  * FRI")
 	public void procesCron() {
 		JSONArray jsonArray = new JsonUtil().getUsers();
 		Gson gson = new Gson();
