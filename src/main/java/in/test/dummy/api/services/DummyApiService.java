@@ -3,6 +3,7 @@ package in.test.dummy.api.services;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.concurrent.ExecutionException;
 
 import org.json.simple.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import com.google.api.core.ApiFuture;
+import com.google.cloud.firestore.Firestore;
+import com.google.cloud.firestore.WriteResult;
+import com.google.firebase.cloud.FirestoreClient;
 import com.google.gson.Gson;
 
 import in.test.dummy.api.repository.DummyApiRepository;
@@ -28,7 +33,7 @@ public class DummyApiService {
 
 	@Autowired
 	DummyApiRepository repository;
-	
+
 	@Scheduled(cron = "0 0 0 ?  * FRI")
 	public void procesCron() {
 		JSONArray jsonArray = new JsonUtil().getUsers();
@@ -54,6 +59,11 @@ public class DummyApiService {
 
 	public ResponseEntity<?> post(DummyAPiModel dummyAPiModel) {
 		DummyAPiModel res = repository.save(dummyAPiModel);
+		
+		Firestore dbFirestore = FirestoreClient.getFirestore();
+		dbFirestore.collection("users").document(String.valueOf(dummyAPiModel.getUserid()))
+				.set(dummyAPiModel);
+		
 		return ResponseEntity.ok().body(res);
 	}
 
@@ -92,8 +102,15 @@ public class DummyApiService {
 	public void delete(Long id) {
 		repository.deleteById(id);
 	}
-	
+
 	private void deleteAllData() {
 		repository.deleteAll();
+	}
+
+	public Object saveInFirebaseDb(DummyAPiModel user) throws InterruptedException, ExecutionException {
+		Firestore dbFirestore = FirestoreClient.getFirestore();
+		dbFirestore.collection("users").document(String.valueOf(user.getUserid()))
+				.set(user);
+		return ResponseEntity.ok(user);
 	}
 }
