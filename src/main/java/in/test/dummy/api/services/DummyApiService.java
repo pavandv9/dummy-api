@@ -28,7 +28,7 @@ public class DummyApiService {
 
 	@Autowired
 	DummyApiRepository repository;
-	
+
 	@Scheduled(cron = "0 0 0 ?  * FRI")
 	public void procesCron() {
 		JSONArray jsonArray = new JsonUtil().getUsers();
@@ -92,8 +92,9 @@ public class DummyApiService {
 	public void delete(Long id) {
 		repository.deleteById(id);
 	}
-	
+
 	private void deleteAllData() {
 		repository.deleteAll();
 	}
+
 }
