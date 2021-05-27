@@ -1,33 +1,26 @@
 package in.test.dummy.api.requestModel;
 
-import java.time.LocalDateTime;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-import javax.persistence.Id;
-
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
-
-import com.google.cloud.firestore.annotation.DocumentId;
-
+@Document(collection = "users")
 public class Users {
 
 	@Id
-	@DocumentId
-	private int id;
+	private Long id;
 	private String name;
 	private String email;
 	private String mobileNo;
-	@CreationTimestamp
-	private LocalDateTime created_at;
-	@UpdateTimestamp
-	private LocalDateTime updated_at;
+	
+	@Transient
+	public static final String SEQUENCE_NAME = "user_sequence";
 
-
-	public int getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 

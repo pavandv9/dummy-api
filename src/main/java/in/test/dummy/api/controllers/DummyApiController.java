@@ -1,7 +1,6 @@
 package in.test.dummy.api.controllers;
 
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -58,8 +57,4 @@ public class DummyApiController {
 		service.delete(id);
 	}
 	
-	@PostMapping("/fb")
-	public Object postInFB(@RequestBody DummyAPiModel dummyAPiModel) throws InterruptedException, ExecutionException {
-		return service.saveInFirebaseDb(dummyAPiModel);
-	}
 }
