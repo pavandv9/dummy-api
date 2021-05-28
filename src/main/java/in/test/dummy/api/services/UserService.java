@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +23,7 @@ public class UserService {
 
 	@Autowired
 	UserRepository userRepository;
-	
+
 	@Autowired
 	SequenceGeneratorService sequenceGeneratorService;
 
@@ -56,7 +57,7 @@ public class UserService {
 			return ResponseEntity.ok().body(data);
 		} catch (NoSuchElementException e) {
 			message.setMessage("No data found for id " + id);
-			return ResponseEntity.ok().body(message);
+			return ResponseEntity.badRequest().body(message);
 		}
 	}
 
@@ -64,8 +65,23 @@ public class UserService {
 		return (List<Users>) userRepository.findAll();
 	}
 
-	public void deleteUser(Long id) {
-		userRepository.deleteById(id);
+	public ResponseEntity<?> deleteUser(Long id) {
+		ResponseEntity<?> user = getUser(id);
+		if ((user.getStatusCode().equals(HttpStatus.OK))) {
+			userRepository.deleteById(id);
+			user = getUser(id);
+			if (user.getStatusCode().equals(HttpStatus.BAD_REQUEST)) {
+				message.setMessage("Successfully deleted user id: " + id);
+				return ResponseEntity.ok().body(message);
+			} else {
+				error.setError("Failed to delete user id: " + id);
+				return ResponseEntity.badRequest().body(message);
+			}
+		} else {
+			message.setMessage("User not exist");
+			return ResponseEntity.ok().body(message);
+		}
+
 	}
 
 }

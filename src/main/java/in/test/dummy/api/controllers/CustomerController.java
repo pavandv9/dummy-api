@@ -45,8 +45,8 @@ public class CustomerController {
 	}
 	
 	@DeleteMapping("/delete/{id}")
-	public void delete(@PathVariable Long id) {
-		userService.deleteUser(id);
+	public ResponseEntity<?> delete(@PathVariable Long id) {
+		return userService.deleteUser(id);
 	}
 
 	@GetMapping("/getbyquery")
