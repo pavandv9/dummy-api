@@ -66,21 +66,4 @@ public class DummyApiController {
 		service.delete(id);
 	}
 	
-	@GetMapping("/{id}")
-	public ResponseEntity<?>  getImageActa(@PathVariable(name = "id") String id)
-			throws IOException, RestClientException, URISyntaxException {
-		String RESULTDOSSEP_URL = "https://api.resultadossep.eleccionesgenerales2021.pe/mesas/detalle/";
-		String url = String.format("%s%s", RESULTDOSSEP_URL, id);
-		HttpHeaders headers = new HttpHeaders();
-		headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
-		headers.set("user-agent",
-				"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.106 Safari/537.36");
-		HttpEntity<String> entity = new HttpEntity<String>(headers);
-
-		RestTemplate restTemplate = new RestTemplate();
-		ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
-		return ResponseEntity.ok().body(response.getBody());
-	}
-
-	
 }
