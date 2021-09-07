@@ -5,6 +5,9 @@ import org.springframework.stereotype.Repository;
 
 import in.test.dummy.api.requestModel.Users;
 
+/**
+ * The Interface UserRepository.
+ */
 @Repository
 public interface UserRepository extends MongoRepository<Users, Long>{
 

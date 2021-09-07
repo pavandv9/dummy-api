@@ -13,12 +13,23 @@ import org.springframework.stereotype.Service;
 
 import in.test.dummy.api.documents.DatabaseSequence;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class SequenceGeneratorService.
+ */
 @Service
 public class SequenceGeneratorService {
 
+	/** The mongo operations. */
 	@Autowired
 	private MongoOperations mongoOperations;
 
+	/**
+	 * Generate sequence.
+	 *
+	 * @param seqName the seq name
+	 * @return the long
+	 */
 	public long generateSequence(String seqName) {
 		DatabaseSequence counter = mongoOperations.findAndModify(query(where("_id").is(seqName)),
 				new Update().inc("seq", 1), options().returnNew(true).upsert(true), DatabaseSequence.class);
